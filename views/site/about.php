@@ -4,15 +4,27 @@
 
 use yii\helpers\Html;
 
-$this->title = 'About';
+$this->title = 'Wedding Picture sharer';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="row">
+        <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3">
 
-    <p>
-        This is the About page. You may modify the following file to customize its content:
-    </p>
+            <div class="card card-body">
+                <h3 class="card-title"><?= Html::encode($this->title) ?></h3>
+                <p>
+                    <?= Yii::t('xenon', 'Wedding picture sharer is an application lovely created by {brand}', [
+                        'brand' => Html::a('Waizabú', 'https://waizabu.com', ['target' => '_blank'])
+                    ]) ?>
+                </p>
+                <hr>
+                <?= Html::a('Waizabú', 'https://waizabu.com', [
+                    'target' => '_blank',
+                    'class' => 'btn btn-outline-secondary w-100'
+                ]) ?>
 
-    <code><?= __FILE__ ?></code>
+            </div>
+        </div>
+    </div>
 </div>

@@ -17,15 +17,17 @@ use yii\web\AssetBundle;
  */
 class AppAsset extends AssetBundle
 {
-    public $basePath = '@webroot';
-    public $baseUrl = '@web';
+    public $sourcePath = '@app/assets/dist';
     public $css = [
-        'css/site.css',
+        'css/wedding.css',
     ];
     public $js = [
     ];
+
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap5\BootstrapAsset'
     ];
+
+
 }

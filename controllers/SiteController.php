@@ -2,14 +2,18 @@
 
 namespace app\controllers;
 
+use app\models\ContactForm;
+use app\models\LoginForm;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
 
+/**
+ *
+ */
 class SiteController extends Controller
 {
     /**
@@ -54,14 +58,37 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionFake()
+    {
+        for ($i = 0; $i < 100; $i++) {
+            $model = new \app\models\Picture();
+            // get a rando timestamp between now and 30 days ago
+            $timestamp = time() - rand(0, 30 * 24 * 60 * 60);
+            $model->created_at = $timestamp;
+            $model->views = rand(0, 1000);
+            $model->filename = 'fake' . $i . '.jpg';
+            $model->shared = rand(0, 1);
+
+            $model->save();
+        }
+    }
+
     /**
      * Displays homepage.
      *
-     * @return string
+     * @return string|\yii\web\Response
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $dataProvider = new ActiveDataProvider([
+            'query' => \app\models\Picture::find()->orderBy('created_at DESC'),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        return $this->render('index',[
+            'dataProvider'=> $dataProvider
+        ]);
     }
 
     /**
@@ -98,22 +125,10 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
+    public function actionSetLocale($locale)
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
+        Yii::$app->session->set('locale', $locale);
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**

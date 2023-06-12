@@ -1,0 +1,31 @@
+@import "variables";
+@import "site";
+@import "upload-button";
+@import "picture-list-view";
+
+body {
+  background-color: #f4f2ee;
+}
+
+
+.navbar-toggler {
+  border: none;
+  box-shadow: none;
+}
+
+
+.wedding-nav {
+  background-color: #fff;
+
+  li {
+    padding: 1rem .4rem;
+  }
+}
+
+// rules for --bs-breakpoint-md
+@media (max-width: var(--bs-breakpoint-md)) {
+  .navbar-light {
+    background: transparent;
+  }
+
+}

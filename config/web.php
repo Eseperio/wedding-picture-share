@@ -1,17 +1,47 @@
 <?php
 
+define('WEDDING_APP_INSTALLED', file_exists(__DIR__ . '/../.env'));
+
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+$events = require __DIR__ . '/events.php';
+$db = null;
+if (WEDDING_APP_INSTALLED) {
+    $db = require __DIR__ . '/db.php';
+}
 
 $config = [
     'id' => 'basic',
+    'name' => $_ENV['APP_NAME'] ?? 'Wedding share picture app',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
+        'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@vendor/2amigos/yii2-file-upload-widget/src/views' => '@app/views/fileupload',
+                ],
+            ],
+        ],
+        'i18n' => [
+            'translations' => [
+                'xenon' => [
+                    'class' => yii\i18n\PhpMessageSource::class,
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'en',
+                ],
+            ],
+        ],
+        'assetManager' => [
+            'linkAssets' => YII_ENV_DEV,
+            'bundles' => [
+                'yii\bootstrap\BootstrapPluginAsset' => false,
+                'yii\bootstrap\BootstrapAsset'=> false
+            ]
+        ],
         'request' => [
             'cookieValidationKey' => 'insert-your-cookie-key-here',
         ],
@@ -45,6 +75,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'install' => 'install/index',
+                '<action>' => 'site/<action>',
             ],
         ],
     ],
