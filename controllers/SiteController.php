@@ -84,7 +84,7 @@ class SiteController extends Controller
             'query' => \app\models\Picture::find(),
             'sort' => [
                 'defaultOrder' => [
-//                    'created_at' => SORT_DESC
+                    'created_at' => SORT_DESC
                 ]
             ],
         ]);

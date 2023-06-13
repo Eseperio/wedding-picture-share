@@ -5,46 +5,42 @@
 ?>
 
 
+<div id="upload-progress" class="progress">
+    <div class="progress-bar bg-secondary progress-bar-success"></div>
+</div>
+
 <?php
-echo \dosamigos\fileupload\FileUploadUI::widget([
+echo \dosamigos\fileupload\FileUpload::widget([
     'model' => new \app\models\PictureUploadModel(),
     'attribute' => 'file',
+    'plus' => true,
     'url' => ['/picture/handle-upload'],
-    // limit filetypes to .geojson and .sld
-    'gallery' => false,
-    'fieldOptions' => [
-        'accept' => 'application/geojson,application/vnd.ogc.sld+xml',
+    'options' => [
+        'accept' => 'image/jpeg',
         'multiple' => true,
     ],
     'clientOptions' => [
-        'acceptFileTypes' => new \yii\web\JsExpression('/(\.|\/)(geojson|sld|jpeg|jpg|pdf)$/i'),
-        // limit to 10 MB
-        'maxFileSize' => 10 * 1024 * 1024,
-        'sequentialUploads' => true,
-        'deleteUrl' => 'delete-file',
-        'removeAfterUpload' => true,
+        'progressall' => new \yii\web\JsExpression(<<<JS
 
-        'messages' => [
-            'maxNumberOfFiles' => 'Máximo número de archivos excedido',
-            'acceptFileTypes' => 'Tipo de archivo no permitido',
-            'maxFileSize' => 'Archivo demasiado grande.',
-            'minFileSize' => 'Archivo demasiado pequeño'
-        ],
-    ],
-    'clientEvents' => [
-        'fileuploaddone' => new \yii\web\JsExpression(<<<JS
 function(e, data) {
-    console.log(data);
-                        // Check if the upload was successful
-                            if (data.result && data.result.success) {
-                                // Remove the file row from the DOM
-                            $(data.context).remove();
-                                }
-                            return true;
-                        }
+        console.log("asads");
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#upload-progress .progress-bar").css(
+                "width",
+                progress + "%"
+            );
+        }
+JS
+        ),
+        // when all files are uploaded, redirect to index page
+        'done' => new \yii\web\JsExpression(<<<JS
+function(e, data) {
+            location.reload();
+        }
 JS
         ),
     ],
+
 
 ])
 ?>
