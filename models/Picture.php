@@ -77,18 +77,28 @@ class Picture extends \yii\db\ActiveRecord
      * @return string
      * @throws \yii\base\Exception
      */
-    public function getFullPath($id, $autoCreate = false)
+    public function getFullPath($id, $suffix = '', $autoCreate = false)
     {
         $uploadPath = Yii::getAlias('@webroot/uploads');
-        $path = implode('/', str_split($id));
+        $path = $this->getIdsAsPath($id);
         $dir = $uploadPath . '/' . $path;
         FileHelper::createDirectory($dir);
 
-        return $dir . '/' . $id . '.jpg';
+        return $dir . '/' . $id . $suffix . '.jpg';
     }
 
     public function getThumbnailUrl()
     {
-        return "https://picsum.photos/300/300?random=" . $this->id;
+        return Yii::getAlias('@web/uploads/' . $this->getIdsAsPath($this->id) . '/' . $this->id . '-thumbnail.jpg');
+    }
+
+    /**
+     * @param $id
+     * @return string
+     */
+    private function getIdsAsPath($id): string
+    {
+        $path = implode('/', str_split($id));
+        return $path;
     }
 }

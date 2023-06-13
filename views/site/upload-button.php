@@ -23,6 +23,7 @@ echo \dosamigos\fileupload\FileUploadUI::widget([
         'sequentialUploads' => true,
         'deleteUrl' => 'delete-file',
         'removeAfterUpload' => true,
+
         'messages' => [
             'maxNumberOfFiles' => 'Máximo número de archivos excedido',
             'acceptFileTypes' => 'Tipo de archivo no permitido',

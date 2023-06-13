@@ -4,6 +4,7 @@ namespace app\models;
 
 use Brick\Geo\IO\GeoJSONReader;
 use Brick\Geo\IO\WKTWriter;
+use Imagine\Imagick\Image;
 use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
@@ -78,11 +79,17 @@ class PictureUploadModel extends Model
                 $this->addError('file', implode(', ', $model->getFirstErrors()));
                 return;
             }
-            $fileSaved = $file->saveAs($model->getFullPath($model->id, true));
+            $filepath = $model->getFullPath($model->id, '', true);
+            $fileSaved = $file->saveAs($filepath);
             if (!$fileSaved) {
                 $this->addError('file', 'Error al guardar el archivo');
                 return;
             }
+            // create a 500x500 thumbnail and store with _thumb suffix
+            $thumbPath = $model->getFullPath($model->id, '-thumbnail', true);
+            \yii\imagine\Image::thumbnail($filepath, 500, 500)->save($thumbPath, ['quality' => 80]);
+
+
         } catch (\Exception $e) {
             $this->addError('file', $e->getMessage());
         }

@@ -81,9 +81,11 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => \app\models\Picture::find()->orderBy('created_at DESC'),
-            'pagination' => [
-                'pageSize' => 10,
+            'query' => \app\models\Picture::find(),
+            'sort' => [
+                'defaultOrder' => [
+//                    'created_at' => SORT_DESC
+                ]
             ],
         ]);
         return $this->render('index',[

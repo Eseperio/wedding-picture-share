@@ -18,6 +18,14 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm' => '@vendor/npm-asset',
     ],
+    'container' => [
+        'definitions' => [
+            \yii\widgets\LinkPager::class => [
+                'class' => \yii\bootstrap5\LinkPager::class,
+                'maxButtonCount' => 5,
+            ]
+        ]
+    ],
     'components' => [
         'view' => [
             'theme' => [
@@ -39,7 +47,7 @@ $config = [
             'linkAssets' => YII_ENV_DEV,
             'bundles' => [
                 'yii\bootstrap\BootstrapPluginAsset' => false,
-                'yii\bootstrap\BootstrapAsset'=> false
+                'yii\bootstrap\BootstrapAsset' => false
             ]
         ],
         'request' => [
